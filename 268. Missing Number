@@ -1,0 +1,28 @@
+https://leetcode.com/problems/missing-number/description/
+//Given an array nums containing n distinct numbers in the range [0, n], return the only number in the range that is missing from the array.
+//Учитывая массив `nums`, содержащий `n` различных чисел в диапазоне `[0, n]`, верните единственное число в диапазоне, которое отсутствует в массиве.
+
+//1
+func missingNumber(_ nums: [Int]) -> Int {
+    Set<Int>(0...nums.count).subtracting(Set(nums)).first ?? 0
+}
+
+assert(2 == missingNumber([3,0,1]))
+assert(2 == missingNumber([0,1]))
+assert(8 == missingNumber([9,6,4,2,3,5,7,0,1]))
+
+//2
+func missingNumber(_ nums: [Int]) -> Int {
+    nums.enumerated().reduce(into: nums.count) { partialResult, number in
+        partialResult ^= number.offset ^ number.element
+    }
+}
+
+func missingNumber(_ nums: [Int]) -> Int {
+    nums.enumerated().reduce(into: nums.count) { $0 ^= $1.offset ^ $1.element }
+}
+
+//3
+func missingNumber(_ nums: [Int]) -> Int {
+    (0...nums.count).reduce(0, +) - nums.reduce(0, +)
+}
