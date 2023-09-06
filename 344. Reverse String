@@ -1,0 +1,40 @@
+Write a function that reverses a string. The input string is given as an array of characters `s`.
+Напишите функцию, которая переворачивает строку. Входная строка задается как массив символов `s`.
+
+You must do this by modifying the input array in-place with `O(1)` extra memory.
+Вы должны сделать это, изменив входной массив на месте с дополнительной памятью `O (1)`.
+
+//1
+func reverseString(_ s: inout [Character]) {
+    s.reverse()
+}
+
+var testFirst: [Character] = ["h","e","l","l","o"]
+reverseString(&testFirst)
+assert(["o","l","l","e","h"] == testFirst)
+
+var testSecond: [Character] = ["H","a","n","n","a","h"]
+reverseString(&testSecond)
+assert(["h","a","n","n","a","H"] == testSecond)
+
+//2
+func reverseString(_ s: inout [Character]) {
+    var head = 0
+    var tail = s.count - 1
+    while head < tail {
+        s.swapAt(head, tail)
+        head += 1
+        tail -= 1
+    }
+}
+
+//3
+func reverseString(_ s: inout [Character]) {
+    var head = 0
+    var tail = s.count - 1
+    while head < tail {
+        (s[head], s[tail]) = (s[tail], s[head])
+        head += 1
+        tail -= 1
+    }
+}
