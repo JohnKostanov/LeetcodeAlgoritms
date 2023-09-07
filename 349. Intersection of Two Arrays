@@ -1,0 +1,33 @@
+Given two integer arrays nums1 and nums2, return an array of their intersection. Each element in the result must be unique and you may return the result in any order.
+Учитывая два целочисленных массива `nums1` и `nums2`, верните массив их пересечения. Каждый элемент результата должен быть уникальным, и вы можете возвращать результат в любом порядке.
+
+//1
+func intersection(_ nums1: [Int], _ nums2: [Int]) -> [Int] {
+    Array(Set(nums1).intersection(nums2))
+}
+
+
+assert(intersection([1,2,2,1], [2,2]).contains([2]))
+assert(intersection([4,9,5], [9,4,9,8,4]).contains([9, 4]) ||
+       intersection([4,9,5], [9,4,9,8,4]).contains([4, 9]))
+
+//2
+func intersection(_ nums1: [Int], _ nums2: [Int]) -> [Int] {
+    Set(nums2).filter { nums1.contains($0) }
+}
+
+//3a
+func intersection(_ nums1: [Int], _ nums2: [Int]) -> [Int] {
+    nums1.reduce(into: [Int]()) { partialResult, number in
+        if nums2.contains(number) && !partialResult.contains(number) {
+            partialResult.append(number)
+        }
+    }
+}
+
+//3b
+func intersection(_ nums1: [Int], _ nums2: [Int]) -> [Int] {
+    nums1.reduce(into: [Int]()) { 
+				nums2.contains($1) && !$0.contains($1) ? $0.append($1) : () 
+		}
+}
