@@ -1,0 +1,45 @@
+Given two non-negative integers, `num1` and `num2` represented as string, return *the sum of* `num1` *and* `num2` *as a string*.
+Учитывая два неотрицательных целых числа, `num1` и `num2`, представленных в виде строки, верните сумму  в виде строки.
+
+You must solve the problem without using any built-in library for handling large integers (such as `BigInteger`). 
+You must also not convert the inputs to integers directly.
+Вы должны решить проблему, не используя встроенную библиотеку для обработки больших целых чисел (например, `BigInteger`). 
+Вы также не должны напрямую преобразовывать входные данные в целые числа.
+
+func addStrings(_ num1: String, _ num2: String) -> String {
+    var result = ""
+    var numberFirstCopy = num1
+    var numberSecondCopy = num2
+    var carry = 0
+    
+    guard num1 != "0" else { return num2 }
+    guard num2 != "0" else { return num1 }
+
+    while !numberFirstCopy.isEmpty || !numberSecondCopy.isEmpty {
+        var numberFromFirstString = 0
+        var numberFromSecondString = 0
+        if !numberFirstCopy.isEmpty {
+            numberFromFirstString = numberFirstCopy.removeLast().wholeNumberValue ?? 0
+        }
+        if !numberSecondCopy.isEmpty {
+            numberFromSecondString = numberSecondCopy.removeLast().wholeNumberValue ?? 0
+        }
+
+        let sum = numberFromFirstString + numberFromSecondString + carry
+        carry = sum / 10
+        result = (sum % 10).description + result
+    }
+
+    if carry == 1 {
+        result = "1" + result
+    }
+
+    print(result)
+    return result
+}
+
+assert(addStrings("11", "123") == "134")
+assert(addStrings("456", "77") == "533")
+assert(addStrings("0", "0") == "0")
+assert(addStrings("9999", "9915") == "19914")
+assert(addStrings("2229", "2229") == "4458")
