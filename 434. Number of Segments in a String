@@ -1,0 +1,53 @@
+Given a string `s`, return *the number of segments in the string.
+Учитывая строку `s`, верните количество сегментов в строке.
+
+A segment is defined to be a contiguous sequence of non-space characters.
+Сегмент определяется как непрерывная последовательность символов, не содержащих пробелов.
+
+//1
+func countSegments(_ s: String) -> Int {
+    s.split(separator: " ").count
+}
+
+assert(5 == countSegments("Hello, my name is John"))
+assert(1 == countSegments("Hello"))
+assert(0 == countSegments("     "))
+
+//2
+func countSegments(_ s: String) -> Int {
+    print(s.components(separatedBy: " "))
+    return s.components(separatedBy: " ").filter { !$0.isEmpty }.count
+}
+
+//3
+func countSegments(_ s: String) -> Int {
+    guard !s.isEmpty else { return 0 }
+    var count = 0
+    var lastSymbol = s.first?.description
+    
+    (s + " ").forEach {
+        if $0 == " " && lastSymbol != " " {
+            count += 1
+        }
+        lastSymbol = $0.description
+    }
+    return count
+}
+
+//4
+func countSegments(_ s: String) -> Int {
+    var count = 0
+    (0..<s.count).forEach { index in
+        if s[s.index(s.startIndex, offsetBy: index)] != " " && (index == 0 || s[s.index(s.startIndex, offsetBy: index - 1)] == " ") {
+            count += 1
+        }
+    }
+    return count
+}
+
+//5
+func countSegments(_ s: String) -> Int {
+    (0..<s.count).reduce(into: 0) { partialResult, index in
+        s[s.index(s.startIndex, offsetBy: index)] != " " && (index == 0 || s[s.index(s.startIndex, offsetBy: index - 1)] == " ") ? partialResult += 1 : ()
+    }
+}
