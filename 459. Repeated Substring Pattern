@@ -1,0 +1,17 @@
+Given a string s, check if it can be constructed by taking a substring of it and appending multiple copies of the substring together.
+Учитывая строку s, проверьте, можно ли ее создать, взяв ее подстроку и добавив несколько копий подстроки вместе.
+
+//1
+func repeatedSubstringPattern(_ s: String) -> Bool {
+    let sumS = (s + s)
+    let sub = sumS[sumS.index(after: sumS.startIndex)..<sumS.index(before: sumS.endIndex)]
+    return sub.contains(s)
+}
+assert(true == repeatedSubstringPattern("abab"))
+assert(false == repeatedSubstringPattern("aba"))
+assert(true == repeatedSubstringPattern("abcabcabcabc"))
+
+//2
+func repeatedSubstringPattern(_ s: String) -> Bool {
+    String(repeating: s, count: 2).dropFirst().dropLast().contains(s)
+}
