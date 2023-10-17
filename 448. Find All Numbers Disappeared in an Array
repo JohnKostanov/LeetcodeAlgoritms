@@ -1,0 +1,57 @@
+Given an array nums of n integers where nums[i] is in the range [1, n], return an array of all the integers in the range [1, n] that do not appear in nums.
+Учитывая массив nums из n целых чисел, где nums[i] находится в диапазоне [1, n], верните массив всех целых чисел в диапазоне [1, n], которые не встречаются в nums.
+
+//1
+func findDisappearedNumbers(_ nums: [Int]) -> [Int] {
+    Array(Set((1...nums.count)).symmetricDifference(nums))
+}
+
+
+assert([5,6] == findDisappearedNumbers([4,3,2,7,8,2,3,1]))
+assert([2] == findDisappearedNumbers([1,1]))
+
+//2
+func findDisappearedNumbers(_ nums: [Int]) -> [Int] {
+    var dic = [Int:Bool]()
+    var result = [Int]()
+    for num in nums {
+        if dic[num] == nil {
+            dic[num] = true
+        }
+    }
+    for i in 1...nums.count {
+        if dic[i] == nil {
+            result.append(i)
+        }
+    }
+    return result
+}
+
+//3
+func findDisappearedNumbers(_ nums: [Int]) -> [Int] {
+    let result = Array(1...nums.count)
+    for i in 0..<nums.count {
+        result[nums[i] - 1] = 0
+    }
+    return result.filter { $0 != 0 }
+}
+
+//4
+func findDisappearedNumbers(_ nums: [Int]) -> [Int] {
+    let setNumbers = Set(nums)
+    var result = [Int]()
+    for i in 1...nums.count where !setNumbers.contains(i) {
+        result.append(i)
+    }
+    return result
+}
+
+//5
+func findDisappearedNumbers(_ nums: [Int]) -> [Int] {
+    var setNumbers = Set(nums)
+    return (1...nums.count).reduce(into: [Int]()) { partialResult, number in
+        if !setNumbers.contains(number) {
+            partialResult.append(number)
+        }
+    }
+}
