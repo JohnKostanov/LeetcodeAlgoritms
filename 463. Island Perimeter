@@ -1,0 +1,55 @@
+You are given row x col grid representing a map where grid[i][j] = 1 represents land and grid[i][j] = 0 represents water.
+Вам дана row x col grid, представляющая карту, где grid[i][j] = 1 представляет землю, а grid[i][j] = 0 представляет воду.
+
+Grid cells are connected horizontally/vertically (not diagonally). The grid is completely surrounded by water, and there is exactly one island (i.e., one or more connected land cells).
+Ячейки сетки соединяются горизонтально/вертикально (не по диагонали). Сетка полностью окружена водой, и имеется ровно один остров (т. е. одна или несколько связанных ячеек суши).
+
+The island doesn't have "lakes", meaning the water inside isn't connected to the water around the island. 
+One cell is a square with side length 1. The grid is rectangular, width and height don't exceed 100. Determine the perimeter of the island.
+На острове нет «озёр», то есть вода внутри не связана с водой вокруг острова. 
+Одна ячейка представляет собой квадрат со стороной 1. Сетка прямоугольная, ширина и высота не превышают 100. Определите периметр острова.
+
+
+func islandPerimeter(_ grid: [[Int]]) -> Int {
+    var perimeter = 0
+    
+    for row in 0..<grid.count {
+        for col in 0..<grid[0].count {
+            guard grid[row][col] == 1 else { continue }
+            // Check the top edge
+            if row == 0 || grid[row - 1][col] == 0 {
+                perimeter += 1
+            }
+            
+            // Check the left edge
+            if col == 0 || grid[row][col - 1] == 0 {
+                perimeter += 1
+            }
+            
+            // Check the right edge
+            if col == grid[0].count - 1 || grid[row][col + 1] == 0 {
+                perimeter += 1
+            }
+            
+            // Check the bottom edge
+            if row == grid.count - 1 || grid[row + 1][col] == 0 {
+                perimeter += 1
+            }
+        }
+    }
+    
+    return perimeter
+}
+
+let gridFirst = [[0,1,0,0],
+                 [1,1,1,0],
+                 [0,1,0,0],
+                 [1,1,0,0]]
+
+let gridSecond = [[1]]
+
+let gridThird = [[1,0]]
+
+assert(16 == islandPerimeter(gridFirst))
+assert(4 == islandPerimeter(gridSecond))
+assert(4 == islandPerimeter(gridThird))
