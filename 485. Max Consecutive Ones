@@ -1,0 +1,45 @@
+Given a binary array nums, return the maximum number of consecutive 1's in the array.
+Учитывая числа двоичного массива nums, верните максимальное количество последовательных единиц в массиве.
+
+//1
+func findMaxConsecutiveOnes(_ nums: [Int]) -> Int {
+    var count = 0
+    var maxValue = 0
+    for num in nums {
+        guard num == 1 else {
+            count = 0
+            continue
+        }
+        count += 1
+        maxValue = max(maxValue, count)
+    }
+    return maxValue
+}
+
+//2
+func findMaxConsecutiveOnes(_ nums: [Int]) -> Int {
+    var (count, maxValue) = (0, 0)
+  
+    for num in nums {
+        count = num == 1 ? count + 1 : 0
+        maxValue = max(maxValue, count)
+    }
+    return maxValue
+}
+
+//3
+func findMaxConsecutiveOnes(_ nums: [Int]) -> Int {
+    nums.split(separator: 0)
+        .sorted { $0.count < $1.count }
+        .last?.count ?? 0
+}
+
+//4
+func findMaxConsecutiveOnes(_ nums: [Int]) -> Int {
+    nums.split(separator: 0)
+        .map { $0.count }
+        .max() ?? 0
+}
+
+assert(3 == findMaxConsecutiveOnes([1,1,0,1,1,1]))
+assert(2 == findMaxConsecutiveOnes([1,0,1,1,0,1]))
