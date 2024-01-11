@@ -1,0 +1,77 @@
+Our hero Teemo is attacking an enemy Ashe with poison attacks! When Teemo attacks Ashe, Ashe gets poisoned for a exactly duration seconds. 
+More formally, an attack at second t will mean Ashe is poisoned during the inclusive time interval [t, t + duration - 1]. 
+If Teemo attacks again before the poison effect ends, the timer for it is reset, and the poison effect will end duration seconds after the new attack.
+Наш герой Тимо атакует врага Эша ядовитыми атаками! Когда Тимо атакует Эша, Эш отравляется ровно на несколько секунд. 
+Более формально, атака на секунде t будет означать, что Эш отравлен в течение определенного интервала времени [t, t + duration - 1]. 
+Если Тимо атакует еще раз до того, как эффект яда закончится, таймер для него сбрасывается, и эффект яда закончится через несколько секунд после новой атаки.
+
+You are given a non-decreasing integer array timeSeries, where timeSeries[i] denotes that Teemo attacks Ashe at second timeSeries[i], and an integer duration.
+Вам дан неубывающий целочисленный массив timeSeries, где timeSeries[i] означает, что Тимо атакует Эша во второй раз timeSeries[i], и целое число duration.
+
+Return the total number of seconds that Ashe is poisoned.
+Верните общее количество секунд, в течение которых Эш был отравлен.
+
+//1
+func findPoisonedDuration(_ timeSeries: [Int], _ duration: Int) -> Int {
+    var totalDuration = 0
+    timeSeries.enumerated().forEach { (index, startPoint) in
+        let endPoint = index < timeSeries.count - 1 
+        ? min((startPoint + duration), timeSeries[index + 1])
+        : max((startPoint + duration), timeSeries[index])
+        
+        (startPoint..<endPoint).forEach { _ in
+            totalDuration += 1
+        }
+    }
+    return totalDuration
+}
+
+//2
+func findPoisonedDuration(_ timeSeries: [Int], _ duration: Int) -> Int {
+    var totalDuration = 0
+    var endPoint = 0
+    for startPoint in timeSeries {
+        if startPoint < endPoint {
+            let remaining = endPoint - startPoint
+            totalDuration -= remaining
+        }
+        totalDuration += duration
+        endPoint = startPoint + duration
+    }
+    return totalDuration
+}
+
+//3
+func findPoisonedDuration(_ timeSeries: [Int], _ duration: Int) -> Int {
+    guard duration > 0 else { return 0 }
+    var totalDuration = 0
+    
+    for index in 0..<timeSeries.count - 1 {
+        if timeSeries[index] + (duration - 1) < timeSeries[index + 1] {
+            totalDuration += duration
+        } else {
+            totalDuration += timeSeries[index + 1] - timeSeries[index]
+        }
+    }
+    
+    return totalDuration + duration
+}
+
+//4
+func findPoisonedDuration(_ timeSeries: [Int], _ duration: Int) -> Int {
+    var totalDuration = 0
+    for i in timeSeries.indices[1...] {
+        totalDuration += min(duration, timeSeries[i] - timeSeries[i - 1])
+    }
+    totalDuration += duration
+    return totalDuration
+}
+
+//5
+func findPoisonedDuration(_ timeSeries: [Int], _ duration: Int) -> Int {
+    timeSeries.indices[1...].reduce(duration) { $0 + min(duration, timeSeries[$1] - timeSeries[$1 - 1])}
+}
+
+assert(4 == findPoisonedDuration([1, 4], 2))
+assert(3 == findPoisonedDuration([1, 2], 2))
+assert(9 == findPoisonedDuration([1, 4, 6, 7], 3))
