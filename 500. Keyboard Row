@@ -1,0 +1,98 @@
+Given an array of strings words, return the words that can be typed using letters of the alphabet on only one row of American keyboard like the image below.
+Учитывая массив строковых слов, верните слова, которые можно набрать с использованием букв алфавита только в одной строке американской клавиатуры, как показано на рисунке ниже.
+
+In the American keyboard:
+- the first row consists of the characters `"qwertyuiop"`,
+- the second row consists of the characters `"asdfghjkl"`, and
+- the third row consists of the characters `"zxcvbnm"`.
+
+На американской клавиатуре:
+- первая строка состоит из символов `"qwertyuiop"`,
+- вторая строка состоит из символов `"asdfghjkl"` и
+- третья строка состоит из символов `"zxcvbnm"`.
+
+//1
+func findWords(_ words: [String]) -> [String] {
+    let firstRow = "qwertyuiop"
+    let secondRow = "asdfghjkl"
+    let thirdRow = "zxcvbnm"
+    
+    var result = [String]()
+    
+    words.map { word in
+        var isOnLineFirst = true
+        var isOnLineSecond = true
+        var isOnLineThird = true
+        
+        word.lowercased().map { character in
+            if !firstRow.contains(character) {
+                isOnLineFirst = false
+            }
+            if !secondRow.contains(character) {
+                isOnLineSecond = false
+            }
+            if !thirdRow.contains(character) {
+                isOnLineThird = false
+            }
+        }
+        if isOnLineFirst || isOnLineSecond || isOnLineThird {
+            result.append(word)
+        }
+    }
+    
+    return result
+}
+
+assert(["Alaska","Dad"] == findWords(["Hello","Alaska","Dad","Peace"]))
+assert([] == findWords(["omk"]))
+assert(["adsdf","sfd"] == findWords(["adsdf","sfd"]))
+
+
+//2
+func findWords(_ words: [String]) -> [String] {
+    let charactersInRow = ["qwertyuiop", "asdfghjkl", "zxcvbnm"]
+    var result = [String]()
+    
+    words.map { word in
+        let lowerWorld = Set(word.lowercased())
+        if lowerWorld.isSubset(of: charactersInRow[0]) {
+            result.append(word)
+        } else if lowerWorld.isSubset(of: charactersInRow[1]) {
+            result.append(word)
+        } else if lowerWorld.isSubset(of: charactersInRow[2]) {
+            result.append(word)
+        }
+    }
+    return result
+}
+
+assert(["Alaska","Dad"] == findWords(["Hello","Alaska","Dad","Peace"]))
+assert([] == findWords(["omk"]))
+assert(["adsdf","sfd"] == findWords(["adsdf","sfd"]))
+
+
+//3
+func findWords(_ words: [String]) -> [String] {
+    var result = [String]()
+    ["qwertyuiop", "asdfghjkl", "zxcvbnm"].forEach { charactersInRow in
+        words.forEach {
+            if Set($0.lowercased()).isSubset(of: charactersInRow) {
+                result.append($0)
+            }
+        }
+    }
+    return result
+}
+
+assert(["Alaska","Dad"] == findWords(["Hello","Alaska","Dad","Peace"]))
+assert([] == findWords(["omk"]))
+assert(["adsdf","sfd"] == findWords(["adsdf","sfd"]))
+
+//4
+func findWords(_ words: [String]) -> [String] {
+    words.filter( { Set($0.lowercased()).isSubset(of: "qwertyuiop") || Set($0.lowercased()).isSubset(of: "asdfghjkl") || Set($0.lowercased()).isSubset(of: "zxcvbnm") } )
+}
+
+assert(["Alaska","Dad"] == findWords(["Hello","Alaska","Dad","Peace"]))
+assert([] == findWords(["omk"]))
+assert(["adsdf","sfd"] == findWords(["adsdf","sfd"]))
